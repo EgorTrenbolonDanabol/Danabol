@@ -109,4 +109,30 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
     protected double interpolate(double x, int floorIndex) {
         return 0;
     }
+    @Override
+    public String toString() {
+        String ans = "("+ this.xValues[0] + "; " + this.yValues[0] + ")";
+        for (int i = 1; i < this.count; i++) {
+            ans += " (" + this.xValues[i] + "; " + this.yValues[i] + ")";
+        }
+        return ans;
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ArrayTabulatedFunction that = (ArrayTabulatedFunction) o;
+        return count == that.count && Arrays.equals(xValues, that.xValues) && Arrays.equals(yValues, that.yValues);
+    }
+    @Override
+    public int hashCode() {
+        int result = Arrays.hashCode(xValues);
+        result = 31 * result + Arrays.hashCode(yValues);
+        result = 31 * result + count;
+        return result;
+    }
+    @Override
+    protected Object clone() {
+        return new ArrayTabulatedFunction(this.xValues, this.yValues);
+    }
 }

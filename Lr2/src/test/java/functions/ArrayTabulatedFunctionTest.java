@@ -85,4 +85,45 @@ class ArrayTabulatedFunctionTest {
         assertEquals(1, function.floorIndexOfX(2.5));
         assertEquals(2, function.floorIndexOfX(4.0));
     }
+    @Test
+    public void testToString() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {2.0, 4.0, 6.0};
+        ArrayTabulatedFunction tabulatedFunction = new ArrayTabulatedFunction(xValues, yValues);
+
+        String expectedString = "(1.0; 2.0) (2.0; 4.0) (3.0; 6.0)";
+        assertEquals(expectedString, tabulatedFunction.toString());
+    }
+    @Test
+    public void testEquals() {
+        double[] xValues1 = {1.0, 2.0, 3.0};
+        double[] yValues1 = {2.0, 4.0, 6.0};
+        ArrayTabulatedFunction function1 = new ArrayTabulatedFunction(xValues1, yValues1);
+
+        double[] xValues2 = {1.0, 2.0, 3.0};
+        double[] yValues2 = {2.0, 4.0, 6.0};
+        ArrayTabulatedFunction function2 = new ArrayTabulatedFunction(xValues2, yValues2);
+
+        assertTrue(function1.equals(function2));
+    }
+    @Test
+    public void testHashCode() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {2.0, 4.0, 6.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+
+        int expectedHashCode = function.hashCode();
+        assertEquals(expectedHashCode, function.hashCode());
+    }
+    @Test
+    public void testClone() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {2.0, 4.0, 6.0};
+        ArrayTabulatedFunction originalFunction = new ArrayTabulatedFunction(xValues, yValues);
+
+        ArrayTabulatedFunction clonedFunction = (ArrayTabulatedFunction) originalFunction.clone();
+        assertTrue(originalFunction != clonedFunction);
+        assertTrue(originalFunction.getClass() == clonedFunction.getClass());
+        assertEquals(originalFunction, clonedFunction);
+    }
 }

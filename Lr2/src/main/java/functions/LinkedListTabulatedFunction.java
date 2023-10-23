@@ -1,7 +1,7 @@
 package functions;
-
+import java.util.Objects;
 public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
-    class Node {
+    static class Node implements Cloneable{
         public double x;
         public double y;
         public Node next;
@@ -11,6 +11,28 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
             this.x = x;
             this.y = y;
         }
+        public String toString() {
+            return "(" + x + "; " + y + ")";
+        }
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Node node = (Node) o;
+
+            return Double.compare(node.x, x) == 0 &&
+                    Double.compare(node.y, y) == 0;
+        }
+        public int hashCode(){
+            return Objects.hash(x,y);
+        }
+        public Object clone() throws CloneNotSupportedException {
+            Node clone = (Node) super.clone();
+            clone.next = null;
+            clone.prev = null;
+            return clone;
+        }
+
     }
     private Node head = null;
     private int count = 0;
@@ -29,6 +51,9 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
             head.prev = node;
         }
         count++;
+
+
+
     }
     protected Node getNode(int index) {
         Node node = head;
@@ -174,4 +199,50 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
         return leftY + ((rightY - leftY) / (rightX - leftX)) * (x - leftX);
 
     }
+    public String toString() {
+        String array = head.toString();
+        for (Node current = head.next; current != head; current = current.next) {
+            array += current.toString();
+        }
+        return array;
+    }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LinkedListTabulatedFunction that = (LinkedListTabulatedFunction) o;
+        if (this.count != that.count) return false;
+        // Проверьте точки для эквивалентности
+        for (int i = 0; i < this.count; i++) {
+            if (this.getX(i) != that.getX(i) || this.getY(i) != that.getY(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int hashCode(){
+        int result = 0;
+        Node elem = head;
+        do {
+            result = 31 * result + elem.hashCode();
+            elem = elem.next;
+        }while(elem != head);
+        return result;
+    }
+
+    public Object clone() {
+        double[] xValuesClone = new double[count];
+        double[] yValuesClone = new double[count];
+        Node elem = head;
+        for (int i = 0; i < count; i++) {
+            xValuesClone[i] = elem.x;
+            yValuesClone[i] = elem.y;
+            elem = elem.next;
+        }
+        LinkedListTabulatedFunction clone = new LinkedListTabulatedFunction(xValuesClone, yValuesClone);
+        return clone;
+    }
+
+
+
 }
