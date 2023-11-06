@@ -3,6 +3,10 @@ package functions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.Iterator;
+import exceptions.DifferentLengthOfArraysException;
+import exceptions.ArrayIsNotSortedException;
+import exceptions.InterpolationException;
 
 class ArrayTabulatedFunctionTest {
     @Test
@@ -125,5 +129,73 @@ class ArrayTabulatedFunctionTest {
         assertTrue(originalFunction != clonedFunction);
         assertTrue(originalFunction.getClass() == clonedFunction.getClass());
         assertEquals(originalFunction, clonedFunction);
+    }
+    @Test
+    public void testConstructorWithTooFewPoints() {
+        double[] xValues = {1.0};
+        double[] yValues = {2.0};
+
+        assertThrows(IllegalArgumentException.class, () -> new ArrayTabulatedFunction(xValues, yValues));
+    }
+    @Test
+    public void ConstructorException() {
+        double[] x1 = {1.0, 2.0, 3.0, 4.0};
+        double[] x2 = {1.0, 2.0, 1.5};
+        double[] y = {2.0, 4.0, 6.0};
+        assertThrows(DifferentLengthOfArraysException.class, () ->{new ArrayTabulatedFunction(x1, y);});
+        assertThrows(ArrayIsNotSortedException.class, () ->{new ArrayTabulatedFunction(x2, y);});
+    }
+    @Test
+    public void testInterpolateWithInvalidFloorIndex() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {1.0, 2.0, 3.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+
+        // Attempt to interpolate with an invalid floorIndex
+        assertThrows(InterpolationException.class, () -> {
+            function.interpolate(2.5, -1); // -1 is an invalid floorIndex
+        });
+        assertThrows(InterpolationException.class, () -> {
+            function.interpolate(2.5, 3); // 3 is an invalid floorIndex
+        });
+    }
+    @Test
+    public void testInterpolateWithInvalidXValue() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {1.0, 2.0, 3.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+
+        // Attempt to interpolate with an x value outside the interpolation interval
+        assertThrows(InterpolationException.class, () -> {
+            function.interpolate(0.5, 0);
+        });
+        assertThrows(InterpolationException.class, () -> {
+            function.interpolate(4.0, 0);
+        });
+    }
+    @Test
+    public void IteratorWhileTest() {
+        double[] x = {2.0, 4.0, 5.0};
+        double[] y = {4.0, 8.0, 10.0};
+        ArrayTabulatedFunction f = new ArrayTabulatedFunction(x, y);
+        Iterator<Point> iterator = f.iterator();
+        int i = 0;
+        while(iterator.hasNext()) {
+            Point point = iterator.next();
+            assertEquals(x[i], point.x);
+            assertEquals(y[i++], point.y);
+        }
+    }
+
+    @Test
+    public void IteratorForEachTest() {
+        double[] x = {2.0, 4.0, 5.0};
+        double[] y = {4.0, 8.0, 10.0};
+        ArrayTabulatedFunction f = new ArrayTabulatedFunction(x, y);
+        int i = 0;
+        for (Point point : f) {
+            assertEquals(x[i], point.x);
+            assertEquals(y[i++], point.y);
+        }
     }
 }

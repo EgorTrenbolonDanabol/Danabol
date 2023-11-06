@@ -1,5 +1,8 @@
 package functions;
 import java.util.Objects;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import exceptions.InterpolationException;
 public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
     static class Node implements Cloneable{
         public double x;
@@ -51,9 +54,6 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
             head.prev = node;
         }
         count++;
-
-
-
     }
     protected Node getNode(int index) {
         Node node = head;
@@ -63,12 +63,20 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
         return node;
     }
     public LinkedListTabulatedFunction(double[] xValues, double[] yValues) {
+        AbstractTabulatedFunction.checkSorted(xValues);
+        AbstractTabulatedFunction.checkLengthIsTheSame(xValues, yValues);
+        if (xValues.length < 2)
+        {throw new IllegalArgumentException("Array length < 2");}
+
         for (int i = 0; i < xValues.length; i++) {
             addNode(xValues[i], yValues[i]);
         }
     }
 
     public LinkedListTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
+        if (count < 2)
+        {throw new IllegalArgumentException("Count must be at least 2");}
+
         if (xFrom > xTo) {
             double temp = xFrom;
             xFrom = xTo;
@@ -88,14 +96,24 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
 
     // Метод, получающий значение аргумента x по номеру индекса
     public double getX(int index) {
+        if (index < 0 || index >= count){
+            throw new IllegalArgumentException("the index goes beyond the acceptable values");}
+
         return getNode(index).x;
     }
 
     public double getY(int index) {
+        if (index < 0 || index >= count) {
+            throw new IllegalArgumentException("the index goes beyond the acceptable values");
+        }
+
         return getNode(index).y;
     }
 
     public void setY(int index, double value) {
+        if (index < 0 || index >= count){
+            throw new IllegalArgumentException("the index goes beyond the acceptable values");
+        }
         getNode(index).y = value;
     }
 
@@ -150,6 +168,9 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
             double leftY = getY(floorIndex - 1);
             double rightX = getX(floorIndex);
             double rightY = getY(floorIndex);
+            if (x < leftX || x > rightX) {
+                throw new InterpolationException("Interpolation point is outside the interpolation interval.");
+            }
             return interpolate(x, leftX, rightX, leftY, rightY);
         }
 
@@ -242,7 +263,29 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
         LinkedListTabulatedFunction clone = new LinkedListTabulatedFunction(xValuesClone, yValuesClone);
         return clone;
     }
+    public Iterator<Point> iterator() {
+        return new Iterator<Point>() {
+            private Node currentNode = head;
+            private int currentIndex = 0;
 
+            @Override
+            public boolean hasNext() {
+                return currentIndex < count;
+            }
 
+            @Override
+            public Point next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
 
+                double x = currentNode.x;
+                double y = currentNode.y;
+                currentNode = currentNode.next;
+                currentIndex++;
+
+                return new Point(x, y);
+            }
+        };
+    }
 }

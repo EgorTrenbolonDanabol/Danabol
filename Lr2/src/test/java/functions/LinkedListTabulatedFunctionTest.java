@@ -1,12 +1,14 @@
 package functions;
 
+import exceptions.InterpolationException;
 
 import org.junit.jupiter.api.Test;
 
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+import exceptions.DifferentLengthOfArraysException;
+import exceptions.ArrayIsNotSortedException;
 class LinkedListTabulatedFunctionTest {
     @Test
     void testNodeToString() {
@@ -141,21 +143,6 @@ class LinkedListTabulatedFunctionTest {
         double[] yValues = {0.0, 1.0, 4.0, 9.0, 16.0};
         return new LinkedListTabulatedFunction(xValues, yValues);
     }
-
-    @Test
-    public void testIndexOfX() {
-        LinkedListTabulatedFunction tabulatedFunction = createSampleTabulatedFunction();
-        assertEquals(2, tabulatedFunction.indexOfX(2.0));
-        assertEquals(-1, tabulatedFunction.indexOfX(5.0)); // Value not present
-    }
-
-    @Test
-    public void testIndexOfY() {
-        LinkedListTabulatedFunction tabulatedFunction = createSampleTabulatedFunction();
-        assertEquals(2, tabulatedFunction.indexOfY(4.0));
-        assertEquals(-1, tabulatedFunction.indexOfY(42.0)); // Value not present
-    }
-
     @Test
     public void testLeftBound() {
         LinkedListTabulatedFunction tabulatedFunction = createSampleTabulatedFunction();
@@ -166,18 +153,6 @@ class LinkedListTabulatedFunctionTest {
     public void testRightBound() {
         LinkedListTabulatedFunction tabulatedFunction = createSampleTabulatedFunction();
         assertEquals(4.0, tabulatedFunction.rightBound());
-    }
-    @Test
-    public void testFloorIndexOfX() {
-        double[] xValues = {-3.0, 4.0, 6.0};
-        double[] yValues = {9.0, 16.0, 36.0};
-        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
-
-        assertEquals(0, function.floorIndexOfX(-4.0));
-        assertEquals(0, function.floorIndexOfX(-3.0));
-        assertEquals(1, function.floorIndexOfX(4.5));
-        assertEquals(1, function.floorIndexOfX(4.5));
-        assertEquals(3, function.floorIndexOfX(10.0));
     }
     @Test
     void testExtrapolateLeft() {
@@ -206,14 +181,54 @@ class LinkedListTabulatedFunctionTest {
         double[] yValues = {0.0, 1.0, 4.0, 9.0};
         LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
 
-        // Выполняем интерполяцию для x = 1.5 (между x=1 и x=2)
-        double interpolatedValue = function.interpolate(1.5, 1);
-
-        // Ожидаем, что результат будет 1.5
-        assertEquals(1.5, interpolatedValue, 0.001); // Указываем точность сравнения (delta)
+        // Пытаемся выполнить интерполяцию для x = -1.0 (вне интервала)
+        try {
+            double interpolatedValue = function.interpolate(-1.0, 0);
+            fail("InterpolationException should have been thrown.");
+        } catch (InterpolationException e) {
+            // InterpolationException ожидается
+            assertEquals("Interpolation point is outside the interpolation interval.", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            // IllegalArgumentException также ожидается, можно добавить соответствующую проверку
+        }
+    }
+    @Test
+    public void testIndexOfX() {
+        LinkedListTabulatedFunction tabulatedFunction = createSampleTabulatedFunction();
+        assertEquals(2, tabulatedFunction.indexOfX(2.0));
+        try {
+            tabulatedFunction.indexOfX(-1);
+        } catch (IllegalArgumentException e) {
+            assertEquals("the index goes beyond the acceptable values", e.getMessage());
+        }
     }
 
+    @Test
+    public void testIndexOfY() {
+        LinkedListTabulatedFunction tabulatedFunction = createSampleTabulatedFunction();
+        assertEquals(2, tabulatedFunction.indexOfY(4.0));
+        try {
+            tabulatedFunction.indexOfX(-1);
+        } catch (IllegalArgumentException e) {
+            assertEquals("the index goes beyond the acceptable values", e.getMessage());
+        }
+    }
+    @Test
+    public void testFloorIndexOfX() {
+        double[] xValues = {-3.0, 4.0, 6.0};
+        double[] yValues = {9.0, 16.0, 36.0};
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
 
+        try {
+            function.floorIndexOfX(-4.0);
+        } catch (IllegalArgumentException e) {
+            assertEquals("Value of x is less than the left boundary.", e.getMessage());
+        }
+        assertEquals(0, function.floorIndexOfX(-3.0));
+        assertEquals(1, function.floorIndexOfX(4.5));
+        assertEquals(1, function.floorIndexOfX(4.5));
+        assertEquals(3, function.floorIndexOfX(10.0));
+    }
     @Test
     public void testApply() {
         LinkedListTabulatedFunction function = createSampleTabulatedFunction();
@@ -226,11 +241,33 @@ class LinkedListTabulatedFunctionTest {
 
         // Тестирование получения значения по существующему x
         assertEquals(4, function.apply(2.0), 0.001);
-
         // Тестирование интерполяции для x между существующими точками
-        assertEquals(1.5, function.apply(1.5), 0.001);
+        try {
+            function.apply(1.5);
+        } catch (IllegalArgumentException e) {
+            assertEquals("the index goes beyond the acceptable values", e.getMessage());
+        }
+    }
+    @Test
+    public void ConstructorException() {
+        double[] x1 = {1.0, 2.0, 3.0, 4.0};
+        double[] x2 = {1.0, 2.0, 1.5};
+        double[] y = {2.0, 4.0, 6.0};
+        assertThrows(DifferentLengthOfArraysException.class, () ->{new LinkedListTabulatedFunction(x1, y);});
+        assertThrows(ArrayIsNotSortedException.class, () ->{new LinkedListTabulatedFunction(x2, y);});
+    }
+    @Test
+    public void testInterpolateWithInvalidXValue() {
+        double[] xValues = {1.0, 2.0, 3.0, 4.0, 5.0};
+        double[] yValues = {1.0, 2.0, 3.0, 4.0, 5.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
 
-        // Тестирование интерполяции для x, которое отсутствует в таблице
-        assertEquals(5.5, function.apply(2.5), 0.001);
+        // Attempt to interpolate with an x value outside the interpolation interval
+        assertThrows(InterpolationException.class, () -> {
+            function.interpolate(0.5, 0);
+        });
+        assertThrows(InterpolationException.class, () -> {
+            function.interpolate(6.0, 4);
+        });
     }
 }

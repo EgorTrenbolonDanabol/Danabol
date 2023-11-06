@@ -1,5 +1,9 @@
 package functions;
+
 import java.util.Arrays;
+import java.util.Iterator;
+import exceptions.InterpolationException;
+import java.util.NoSuchElementException;
 
 public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
     private double[] xValues;
@@ -7,15 +11,21 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
     private int count;
 
     public ArrayTabulatedFunction(double[] xValues, double[] yValues) {
+        AbstractTabulatedFunction.checkLengthIsTheSame(xValues, yValues);
+        AbstractTabulatedFunction.checkSorted(xValues);
         if (xValues.length != yValues.length) {
             throw new IllegalArgumentException("xValues and yValues must have the same length");
         }
+
+        if (xValues.length < 2) throw new IllegalArgumentException("Length is less than the minimum");
         this.xValues = Arrays.copyOf(xValues, xValues.length);
         this.yValues = Arrays.copyOf(yValues, yValues.length);
         this.count = xValues.length;
     }
 
     public ArrayTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
+        if (count < 2) throw new IllegalArgumentException("Length is less than the minimum");
+
         if (xFrom > xTo) {
             double temp = xFrom;
             xFrom = xTo;
@@ -63,6 +73,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
         }
         yValues[index] = value;
     }
+
     public double leftBound() {
         return xValues[0];
     }
@@ -107,16 +118,32 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
     }
 
     protected double interpolate(double x, int floorIndex) {
-        return 0;
+        if (floorIndex < 0 || floorIndex >= count - 1) {
+            throw new InterpolationException("Interpolation index is out of bounds.");
+        }
+
+        double leftX = xValues[floorIndex];
+        double rightX = xValues[floorIndex + 1];
+
+        if (x < leftX || x > rightX) {
+            throw new InterpolationException("Interpolation point is outside the interpolation interval.");
+        }
+
+        double leftY = yValues[floorIndex];
+        double rightY = yValues[floorIndex + 1];
+
+        return leftY + (rightY - leftY) / (rightX - leftX) * (x - leftX);
     }
+
     @Override
     public String toString() {
-        String ans = "("+ this.xValues[0] + "; " + this.yValues[0] + ")";
+        String ans = "(" + this.xValues[0] + "; " + this.yValues[0] + ")";
         for (int i = 1; i < this.count; i++) {
             ans += " (" + this.xValues[i] + "; " + this.yValues[i] + ")";
         }
         return ans;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -124,6 +151,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
         ArrayTabulatedFunction that = (ArrayTabulatedFunction) o;
         return count == that.count && Arrays.equals(xValues, that.xValues) && Arrays.equals(yValues, that.yValues);
     }
+
     @Override
     public int hashCode() {
         int result = Arrays.hashCode(xValues);
@@ -131,8 +159,30 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
         result = 31 * result + count;
         return result;
     }
+
     @Override
     protected Object clone() {
         return new ArrayTabulatedFunction(this.xValues, this.yValues);
+    }
+
+    @Override
+    public Iterator<Point> iterator() {
+        Iterator<Point> iterator = new Iterator<Point>() {
+            int i;
+
+            @Override
+            public boolean hasNext() {
+                return (i < count);
+            }
+
+            @Override
+            public Point next() {
+                if (hasNext())
+                    return new Point(xValues[i], yValues[i++]);
+                else
+                    throw new NoSuchElementException();
+            }
+        };
+        return iterator;
     }
 }
