@@ -90,15 +90,6 @@ class ArrayTabulatedFunctionTest {
         assertEquals(2, function.floorIndexOfX(4.0));
     }
     @Test
-    public void testToString() {
-        double[] xValues = {1.0, 2.0, 3.0};
-        double[] yValues = {2.0, 4.0, 6.0};
-        ArrayTabulatedFunction tabulatedFunction = new ArrayTabulatedFunction(xValues, yValues);
-
-        String expectedString = "(1.0; 2.0) (2.0; 4.0) (3.0; 6.0)";
-        assertEquals(expectedString, tabulatedFunction.toString());
-    }
-    @Test
     public void testEquals() {
         double[] xValues1 = {1.0, 2.0, 3.0};
         double[] yValues1 = {2.0, 4.0, 6.0};

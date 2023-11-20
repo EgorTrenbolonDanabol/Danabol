@@ -12,6 +12,27 @@ public abstract class AbstractTabulatedFunction implements TabulatedFunction{
     protected double interpolate(double x, double leftX, double rightX, double leftY, double rightY) {
         return leftY + (rightY - leftY) / (rightX - leftX) * (x - leftX);
     }
+
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(getClass().getSimpleName())
+                .append(" size = ")
+                .append(getCount())
+                .append("\n");
+
+        for (Point point : this) {
+            stringBuilder.append("[")
+                    .append(point.x)
+                    .append("; ")
+                    .append(point.y)
+                    .append("]\n");
+        }
+
+        return stringBuilder.toString();
+    }
+
     public double apply(double x) {
         if (x < leftBound())
             return extrapolateLeft(x);

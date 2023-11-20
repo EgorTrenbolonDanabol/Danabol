@@ -38,11 +38,6 @@ class LinkedListTabulatedFunctionTest {
         assertNull(clone.next);
         assertNull(clone.prev);
     }
-    @Test
-    void testToString() {
-        LinkedListTabulatedFunction linkedList = new LinkedListTabulatedFunction(new double[]{1, 2, 3}, new double[]{1, 4, 9});
-        assertEquals("(1.0; 1.0)(2.0; 4.0)(3.0; 9.0)", linkedList.toString());
-    }
 
     @Test
     void testEquals() {
@@ -269,5 +264,19 @@ class LinkedListTabulatedFunctionTest {
         assertThrows(InterpolationException.class, () -> {
             function.interpolate(6.0, 4);
         });
+    }
+    @Test
+    void newToString(){
+        double[] xValue = {1, 2, 2.7, 2.9, 5};
+        double[] yValue = {1, 2, 3, 4, 5};
+
+
+        double[] xValue3 = {5, 7};
+        double[] yValue3 = {2, 7};
+        LinkedListTabulatedFunction linkedListTabulatedFunction=new LinkedListTabulatedFunction(xValue,yValue);
+
+        LinkedListTabulatedFunction linkedListTabulatedFunction2=new LinkedListTabulatedFunction(xValue3,yValue3);
+
+        assertEquals(linkedListTabulatedFunction.toString(), "LinkedListTabulatedFunction size = 5\n[1.0; 1.0]\n[2.0; 2.0]\n[2.7; 3.0]\n[2.9; 4.0]\n[5.0; 5.0]\n");
     }
 }

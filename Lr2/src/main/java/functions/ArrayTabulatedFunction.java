@@ -1,11 +1,13 @@
 package functions;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
 import exceptions.InterpolationException;
 import java.util.NoSuchElementException;
 
-public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
+public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Serializable {
+    private static final long serialVersionUID = -3585087032471720766L;
     private double[] xValues;
     private double[] yValues;
     private int count;
@@ -135,6 +137,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
         return leftY + (rightY - leftY) / (rightX - leftX) * (x - leftX);
     }
 
+/*
     @Override
     public String toString() {
         String ans = "(" + this.xValues[0] + "; " + this.yValues[0] + ")";
@@ -143,6 +146,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
         }
         return ans;
     }
+*/
 
     @Override
     public boolean equals(Object o) {

@@ -3,8 +3,11 @@ import java.util.Objects;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import exceptions.InterpolationException;
-public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
-    static class Node implements Cloneable{
+import java.io.Serializable;
+public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Serializable{
+    private static final long serialVersionUID = -2135922596401784690L;
+
+    static class Node implements Cloneable, Serializable{
         public double x;
         public double y;
         public Node next;
@@ -219,13 +222,6 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
         double rightY = node.y;
         return leftY + ((rightY - leftY) / (rightX - leftX)) * (x - leftX);
 
-    }
-    public String toString() {
-        String array = head.toString();
-        for (Node current = head.next; current != head; current = current.next) {
-            array += current.toString();
-        }
-        return array;
     }
     public boolean equals(Object o) {
         if (this == o) return true;
