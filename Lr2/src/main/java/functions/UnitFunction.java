@@ -1,7 +1,7 @@
 package functions;
 
-public class UnitFunction {
-    public double apply(double x) {
-        return 1;
+public class UnitFunction extends ConstantFunction implements MathFunction{
+    public UnitFunction() {
+        super(1);
     }
 }

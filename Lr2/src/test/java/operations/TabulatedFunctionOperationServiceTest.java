@@ -60,10 +60,10 @@ class TabulatedFunctionOperationServiceTest {
 
         TabulatedFunctionOperationService op = new TabulatedFunctionOperationService();
 
-        // Test Multiplication
+
         assertEquals(ans1, op.Multiplication(a, b));
 
-        // Test Division
+
         assertEquals(ans2, op.Division(a, b));
     }
 }

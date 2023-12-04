@@ -19,12 +19,12 @@ class TabulatedDifferentialOperatorTest {
         TabulatedDifferentialOperator tabulatedDifferentialOperator = new TabulatedDifferentialOperator();
         tabulatedDifferentialOperator.setF(linkedListTabulatedFunctionFactory);
 
-        // Убедитесь, что установленная фабрика соответствует фабрике, которая была установлена.
+
         assertEquals(linkedListTabulatedFunctionFactory.getClass(), tabulatedDifferentialOperator.getF().getClass());
 
         ArrayTabulatedFunctionFactory arrayTabulatedFunctionFactory = new ArrayTabulatedFunctionFactory();
 
-        // Установите другую фабрику и проверьте, что она теперь соответствует установленной фабрике.
+
         tabulatedDifferentialOperator.setF(arrayTabulatedFunctionFactory);
         assertEquals(arrayTabulatedFunctionFactory.getClass(), tabulatedDifferentialOperator.getF().getClass());
     }
@@ -44,4 +44,33 @@ class TabulatedDifferentialOperatorTest {
         assertEquals(7, derive.getY(2));
         assertEquals(7, derive.getY(3));
     }
+    @Test
+    void deriveSynchronously() {
+        double[] xValue = {1.0, 2.0, 3.0, 4.0};
+        double[] yValue = {1.0, 4.0, 9.0, 16.0};
+        LinkedListTabulatedFunctionFactory linkedListTabulatedFunctionFactory = new LinkedListTabulatedFunctionFactory();
+        TabulatedDifferentialOperator tabulatedDifferentialOperator = new TabulatedDifferentialOperator(linkedListTabulatedFunctionFactory);
+        TabulatedFunction arrayTabulatedFunction = new ArrayTabulatedFunction(xValue, yValue);
+        TabulatedFunction derive = tabulatedDifferentialOperator.deriveSynchronously(arrayTabulatedFunction);
+        for(int i = 0; i < arrayTabulatedFunction.getCount(); i++){
+            assertEquals(derive.getX(i), arrayTabulatedFunction.getX(i));
+        }
+        assertEquals(3, derive.getY(0));
+        assertEquals(5, derive.getY(1));
+        assertEquals(7, derive.getY(2));
+        assertEquals(7, derive.getY(3));
+
+        ArrayTabulatedFunctionFactory arrayTabulatedFunctionFactory = new ArrayTabulatedFunctionFactory();
+        TabulatedDifferentialOperator tabulatedDifferentialOperator1 = new TabulatedDifferentialOperator(arrayTabulatedFunctionFactory);
+        TabulatedFunction list = new LinkedListTabulatedFunction(xValue, yValue);
+        derive = tabulatedDifferentialOperator1.deriveSynchronously(list);
+        for(int i = 0; i < list.getCount(); i++){
+            assertEquals(derive.getX(i), list.getX(i));
+        }
+        assertEquals(3, derive.getY(0));
+        assertEquals(5, derive.getY(1));
+        assertEquals(7, derive.getY(2));
+        assertEquals(7, derive.getY(3));
+    }
+
 }

@@ -1,7 +1,7 @@
 package functions;
 
-public class ZeroFunction {
-    public double apply(double x) {
-        return 0;
+public class ZeroFunction extends ConstantFunction implements MathFunction{
+    public ZeroFunction() {
+        super(0);
     }
 }

@@ -10,7 +10,7 @@ public class ArrayTabulatedFunctionSerialization {
         try (FileOutputStream fos = new FileOutputStream(filePath);
              BufferedOutputStream bfos = new BufferedOutputStream(fos)) {
 
-            // Create and serialize the ArrayTabulatedFunction and its derivatives
+
             ArrayTabulatedFunction a = new ArrayTabulatedFunction(new SqrFunction(), 0, 10, 101);
             TabulatedDifferentialOperator op = new TabulatedDifferentialOperator();
             TabulatedFunction a1 = op.derive(a);
@@ -27,7 +27,7 @@ public class ArrayTabulatedFunctionSerialization {
         try (FileInputStream fis = new FileInputStream(filePath);
              BufferedInputStream bfis = new BufferedInputStream(fis)) {
 
-            // Deserialize and print the functions
+
             ArrayTabulatedFunction deserializedA = (ArrayTabulatedFunction) FunctionsIO.deserialize(bfis);
             ArrayTabulatedFunction deserializedA1 = (ArrayTabulatedFunction) FunctionsIO.deserialize(bfis);
             ArrayTabulatedFunction deserializedA2 = (ArrayTabulatedFunction) FunctionsIO.deserialize(bfis);

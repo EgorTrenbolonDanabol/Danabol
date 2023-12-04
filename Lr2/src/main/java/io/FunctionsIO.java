@@ -26,7 +26,6 @@ public final class FunctionsIO {
             count = Integer.parseInt(reader.readLine());
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
-            // Можно добавить логгирование ошибки или другие меры обработки ошибки ввода.
         }
 
         double[] xValues = new double[count];
@@ -42,7 +41,6 @@ public final class FunctionsIO {
                 yValues[i] = nf.parse(xay[1]).doubleValue();
             } catch (IOException | ParseException e) {
                 e.printStackTrace();
-                // Можно добавить логгирование ошибки или другие меры обработки ошибки ввода.
             }
         }
         return factory.create(xValues, yValues);
