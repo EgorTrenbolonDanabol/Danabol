@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operations</title>
+</head>
+<body>
+
+<h1>Function Operations</h1>
+
+<!-- Operand 1 Section -->
+<h2>Operand 1</h2>
+<a href="/createTabulatedFunction">
+    <button>Create Tabulated</button>
+</a>
+<a href="/tabulatedFunctionMathForm">
+    <button>Create Math</button>
+</a>
+
+<!-- Operand 2 Section -->
+<h2>Operand 2</h2>
+<a href="/createTabulatedFunction">
+    <button>Create Tabulated</button>
+</a>
+<a href="/tabulatedFunctionMathForm">
+    <button>Create Math</button>
+</a>
+
+<!-- Operation Section -->
+<h2>Operation</h2>
+<form th:action="@{/operations}" method="post" th:object="${operations}">
+    <label for="operation">Operation:</label>
+    <select id="operation" name="operation" th:field="*{operation}">
+        <option value="add">+</option>
+        <option value="subtract">-</option>
+        <option value="multiply">*</option>
+        <option value="divide">/</option>
+    </select>
+    <button type="submit" name="setOp">Perform Operation</button>
+</form>
+
+</body>
+</html>

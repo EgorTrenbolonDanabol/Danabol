@@ -4,6 +4,7 @@ package ru.ssau.lr7;
 
 import ru.ssau.lr7.functions.TabulatedFunction;
 import ru.ssau.lr7.functions.factory.ArrayTabulatedFunctionFactory;
+import ru.ssau.lr7.functions.factory.LinkedListTabulatedFunctionFactory;
 import ru.ssau.lr7.functions.factory.TabulatedFunctionFactory;
 
 public class TabulatedFunctionForm {
@@ -39,9 +40,14 @@ public class TabulatedFunctionForm {
     public TabulatedFunction getFunction(){
         return function;
     }
-    public void createTabulatedFunction() {
+    public void createArrayTabulatedFunction() {
        TabulatedFunctionFactory factory = new ArrayTabulatedFunctionFactory();
        function = factory.create(xValues, yValues); // сохраняем созданный объект в поле
+    }
+
+    public void createLinkedListTabulatedFunction() {
+        TabulatedFunctionFactory factory = new LinkedListTabulatedFunctionFactory();
+        function = factory.create(xValues, yValues); // сохраняем созданный объект в поле
     }
 
 }

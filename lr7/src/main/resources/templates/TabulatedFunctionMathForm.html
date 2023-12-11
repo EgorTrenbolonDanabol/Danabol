@@ -11,13 +11,13 @@
     <h1>User Registration</h1>
     <form action="#" th:action="@{/tabulatedFunctionMathForm}" method="post" th:object="${mathTabulatedFunctionForm}">
         <label>xFrom:</label>
-        <input type="text" th:field="*{xFrom}" /><br/>
+        <input type="number" th:field="*{xFrom}" step="any"/><br/>
 
         <label>xTo:</label>
-        <input type="text" th:field="*{xTo}" /><br/>
+        <input type="number" th:field="*{xTo}" step="any"/><br/>
 
         <label>count:</label>
-        <input type="text" th:field="*{count}" /><br/>
+        <input type="number" th:field="*{count}" /><br/>
 
         <label>Functions:</label>
         <select th:field="*{function}">

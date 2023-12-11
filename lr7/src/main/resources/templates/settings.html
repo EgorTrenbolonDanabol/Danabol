@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+</head>
+<body>
+<h1>Settings</h1>
+<form th:action="@{/settings}" method="post" th:object="${settings}">
+    <label for="tabulatedFunctionFactory">Tabulated Function Factory:</label>
+    <select id="tabulatedFunctionFactory" name="tabulatedFunctionFactory"
+            th:field="*{tabulatedFunctionFactory}">
+        <option value="array">Array</option>
+        <option value="linked">Linked</option>
+        <!-- Добавьте другие варианты фабрик по мере необходимости -->
+    </select>
+    <button type="submit" name="set">Save</button>
+</form>
+<!-- Остальной HTML вашего окна настроек -->
+</body>
+</html>

@@ -9,11 +9,12 @@ import ru.ssau.lr7.functions.factory.TabulatedFunctionFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Controller
-@SessionAttributes("tabulatedFunctionForm")
+@SessionAttributes({"tabulatedFunctionForm", "settings", "mathTabulatedFunctionForm"})
 public class TabulatedFunctionController {
-
+    Settings settings=new Settings("array");
     @RequestMapping(value = "/createTabulatedFunction", method = RequestMethod.GET)
     public String amountOfPointsForm(@RequestParam(name = "error", required = false, defaultValue = "") String error, Model model) {
         TabulatedFunctionForm tabulatedFunctionForm = new TabulatedFunctionForm();
@@ -24,7 +25,8 @@ public class TabulatedFunctionController {
     @RequestMapping(value = "/createTabulatedFunction", method = RequestMethod.POST)
     public String amountOfPointsSubmit(@ModelAttribute TabulatedFunctionForm tabulatedFunctionForm, Model model) {
         model.addAttribute("tabulatedFunctionForm", tabulatedFunctionForm);
-        System.out.println(tabulatedFunctionForm.getAmount());
+
+        //System.out.println(tabulatedFunctionForm.getAmount());
         return "tabulatedFunctionXY";
     }
 
@@ -37,9 +39,13 @@ public class TabulatedFunctionController {
         }
 
         model.addAttribute("tabulatedFunctionForm", tabulatedFunctionForm);
-        tabulatedFunctionForm.createTabulatedFunction();
-        System.out.println(tabulatedFunctionForm.getAmount());
-        return "tabulatedFunctionResult";
+        switch (settings.getTabulatedFunctionFactory()) {
+            case ("array") -> tabulatedFunctionForm.createArrayTabulatedFunction();
+            case ("linked") -> tabulatedFunctionForm.createLinkedListTabulatedFunction();
+        }
+
+        System.out.println(tabulatedFunctionForm.getFunction());
+        return "index";
     }
 
 
@@ -65,19 +71,48 @@ public class TabulatedFunctionController {
         model.addAttribute("listFunctions", mapa);
         return "tabulatedFunctionMathForm";
     }
-    @RequestMapping(value = "/tabulatedFunctionMathForm", method = RequestMethod.POST, name="reg")
+    @RequestMapping(value = "/tabulatedFunctionMathForm", method = RequestMethod.POST, name = "reg")
     public String xFxTPost(@ModelAttribute MathTabulatedFunctionForm mathTabulatedFunctionForm, Model model) {
         model.addAttribute("mathTabulatedFunctionForm", mathTabulatedFunctionForm);
         model.addAttribute("listFunctions", mapa);
-        TabulatedFunction arrtab;
-        TabulatedFunctionFactory factory=new ArrayTabulatedFunctionFactory();
-        arrtab=factory.create(
-                mapa.get(mathTabulatedFunctionForm.getFunction()),
-                mathTabulatedFunctionForm.getXFrom(),
-                mathTabulatedFunctionForm.getXTo(),
-                mathTabulatedFunctionForm.getCount());
-        System.out.println(mathTabulatedFunctionForm.getXFrom());
-        System.out.print(arrtab);
-        return "tabulatedFunctionMathForm";
+
+        MathFunction selectedFunction = mapa.get(mathTabulatedFunctionForm.getFunction());
+        switch (settings.getTabulatedFunctionFactory()) {
+            case "array" -> mathTabulatedFunctionForm.createArray(selectedFunction);
+            case "linked" -> mathTabulatedFunctionForm.createLinked(selectedFunction);
+        };
+
+
+        System.out.println(mathTabulatedFunctionForm.getTabulatedFunction());
+        return "index";
     }
+
+    // начало второго задания(насткройка)
+
+    @RequestMapping(value = "/settings", method = RequestMethod.GET)
+    public String SettingsPage(Model model) {
+        model.addAttribute("settings", settings);
+        return "settings";
+    }
+    @RequestMapping(value = "/settings", method = RequestMethod.POST, name="set")
+    public String set(@ModelAttribute Settings settings, Model model) {
+        model.addAttribute("settings", settings);
+        //System.out.print(settings.getTabulatedFunctionFactory());
+        return "index";
+    }
+
+
+    //калькулятор
+
+    @RequestMapping(value = "/operations", method = RequestMethod.GET) // открытие формы с калькулятором
+    public String operationForm(Model model) {
+        Operations operations=new Operations();
+        model.addAttribute("operations", operations);
+        return "operations";
+    }
+
+
+
+
 }
+
