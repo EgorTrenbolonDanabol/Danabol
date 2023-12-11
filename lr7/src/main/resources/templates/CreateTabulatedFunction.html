@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Tabulated Function</title>
+</head>
+<body>
+<h1>Create Tabulated Function</h1>
+
+
+<p th:if="${error}" th:text="${error}"></p>
+
+<form th:action="@{/createTabulatedFunction}" th:object="${tabulatedFunctionForm}" method="post">
+  <label for="amount">Number of Points:</label>
+  <input type="number" id="amount" th:field="*{amount}" required max="9999" min="2">
+  <br>
+  <button type="submit">Submit</button>
+</form>
+
+
+</body>
+</html>

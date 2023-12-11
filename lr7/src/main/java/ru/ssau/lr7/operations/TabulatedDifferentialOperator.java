@@ -1,10 +1,10 @@
-package operations;
+package ru.ssau.lr7.operations;
 
-import concurrent.SynchronizedTabulatedFunction;
-import functions.Point;
-import functions.TabulatedFunction;
-import functions.factory.ArrayTabulatedFunctionFactory;
-import functions.factory.TabulatedFunctionFactory;
+import ru.ssau.lr7.concurrent.SynchronizedTabulatedFunction;
+import ru.ssau.lr7.functions.Point;
+import ru.ssau.lr7.functions.TabulatedFunction;
+import ru.ssau.lr7.functions.factory.ArrayTabulatedFunctionFactory;
+import ru.ssau.lr7.functions.factory.TabulatedFunctionFactory;
 public class TabulatedDifferentialOperator implements DifferentialOperator<TabulatedFunction>{
     private TabulatedFunctionFactory factory;
 
