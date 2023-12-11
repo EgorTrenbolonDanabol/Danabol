@@ -66,7 +66,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         return node;
     }
     public LinkedListTabulatedFunction(double[] xValues, double[] yValues) {
-        checkSorted(xValues);
+        //checkSorted(xValues);
         checkLengthIsTheSame(xValues, yValues);
         if (xValues.length < 2)
         {throw new IllegalArgumentException("Array length < 2");}

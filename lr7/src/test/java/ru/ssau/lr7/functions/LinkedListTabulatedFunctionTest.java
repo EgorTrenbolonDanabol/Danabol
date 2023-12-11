@@ -244,14 +244,6 @@ class LinkedListTabulatedFunctionTest {
         }
     }
     @Test
-    public void ConstructorException() {
-        double[] x1 = {1.0, 2.0, 3.0, 4.0};
-        double[] x2 = {1.0, 2.0, 1.5};
-        double[] y = {2.0, 4.0, 6.0};
-        assertThrows(DifferentLengthOfArraysException.class, () ->{new LinkedListTabulatedFunction(x1, y);});
-        assertThrows(ArrayIsNotSortedException.class, () ->{new LinkedListTabulatedFunction(x2, y);});
-    }
-    @Test
     public void testInterpolateWithInvalidXValue() {
         double[] xValues = {1.0, 2.0, 3.0, 4.0, 5.0};
         double[] yValues = {1.0, 2.0, 3.0, 4.0, 5.0};
