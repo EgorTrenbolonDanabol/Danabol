@@ -40,7 +40,7 @@
     </table>
 </form>
 
-<h2>Result</h2>
+<h2>Result: <span th:text="${differentialOperatorForm.result.getClass().getSimpleName()}"></span></h2>
 <form th:action="@{/differentialOperator}" th:object="${differentialOperatorForm}" method="post">
     <table border="1">
         <thead>
