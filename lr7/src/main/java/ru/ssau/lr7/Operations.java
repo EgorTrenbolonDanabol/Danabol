@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Operations {
-    private String operation;
+
     private TabulatedFunctionOperationService CombinedTabulatedFunction;
     public void setSetting(String setting){
         switch (setting) {
@@ -72,11 +72,4 @@ public class Operations {
     }
 
 
-    public String getOperation() {
-        return operation;
-    }
-
-    public void setOperation(String operation) {
-        this.operation = operation;
-    }
 }

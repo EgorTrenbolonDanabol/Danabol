@@ -16,9 +16,6 @@
 <a>
     <button name="createTabulatedFunctionOperand1">Create Tabulated</button>
 </a>
-</form>
-
-<form th:action="@{/operations}" method="post">
     <a>
         <button name="createMathTabulatedFunctionOperand1">Create Math</button>
     </a>
@@ -49,9 +46,6 @@
     <a>
         <button name="createTabulatedFunctionOperand2">Create Tabulated</button>
     </a>
-</form>
-
-<form th:action="@{/operations}" method="post">
     <a>
         <button name="createMathTabulatedFunctionOperand2">Create Math</button>
     </a>
@@ -77,7 +71,7 @@
 </form>
 <!-- Operation Section -->
 <h2>Operation</h2>
-<form th:action="@{/operations}" method="post" th:object="${operations}">
+<form th:action="@{/operations}" method="post" th:object="${settings}">
     <label for="operation">Operation:</label>
     <select id="operation" name="operation" th:field="*{operation}">
         <option value="add">+</option>

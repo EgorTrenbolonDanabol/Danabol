@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.ssau.lr7.functions.*;
 import ru.ssau.lr7.functions.factory.ArrayTabulatedFunctionFactory;
 import ru.ssau.lr7.functions.factory.TabulatedFunctionFactory;
+import ru.ssau.lr7.operations.TabulatedFunctionOperationService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,9 +16,6 @@ import java.util.Objects;
 @SessionAttributes({"tabulatedFunctionForm", "settings", "mathTabulatedFunctionForm", "operations"})
 public class TabulatedFunctionController {
     Settings settings = new Settings("array");
-
-
-
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String setsession(Model model) {
@@ -122,23 +120,22 @@ public class TabulatedFunctionController {
     public String operationForm(Model model,
                                 @ModelAttribute("tabulatedFunctionForm") TabulatedFunctionForm tabulatedFunctionForm,
                                 @ModelAttribute("mathTabulatedFunctionForm") MathTabulatedFunctionForm mathTabulatedFunctionForm) {
-        if(Objects.equals(operations.getType(), "createTabulatedFunctionOperand1"))
-        {
-            operations.setOperand1(tabulatedFunctionForm.getFunction());
+        if(operations.getType()!=null) {
+            TabulatedFunction linkedOperand=tabulatedFunctionForm.getFunction();
+            TabulatedFunction mathOperand=mathTabulatedFunctionForm.getTabulatedFunction();
+
+            switch (operations.getType()) {
+                case "createTabulatedFunctionOperand1" -> operations.setOperand1(linkedOperand);
+                case "createTabulatedFunctionOperand2" -> operations.setOperand2(linkedOperand);
+                case "createMathTabulatedFunctionOperand1" -> operations.setOperand1(mathOperand);
+                case "createMathTabulatedFunctionOperand2" -> operations.setOperand2(mathOperand);
+                default -> {
+                }
+            }
         }
-        else if(Objects.equals(operations.getType(), "createTabulatedFunctionOperand2"))
-        {
-            operations.setOperand2(tabulatedFunctionForm.getFunction());
-        }
-        else if(Objects.equals(operations.getType(), "createMathTabulatedFunctionOperand1"))
-        {
-            operations.setOperand1(mathTabulatedFunctionForm.getTabulatedFunction());
-        }
-        else if(Objects.equals(operations.getType(), "createMathTabulatedFunctionOperand2"))
-        {
-            operations.setOperand2(mathTabulatedFunctionForm.getTabulatedFunction());
-        }
+
         model.addAttribute("operations", operations);
+        model.addAttribute("settings", settings);
         return "operations";
     }
 
@@ -171,15 +168,27 @@ public class TabulatedFunctionController {
     }
 
     @RequestMapping(value = "/operations", method = RequestMethod.POST, params = "perform")
-    public String performOperation(Model model ) {
+    public String performOperation(Model model, @ModelAttribute Settings settings) {
         operations.setSetting(settings.getTabulatedFunctionFactory());
-        System.out.print(operations.getOperation());
-        if(Objects.equals(operations.getOperation(), "add")){
-            System.out.print(operations.getCombinedTabulatedFunction().Addition(operations.getOperand1(), operations.getOperand2()));
+
+        TabulatedFunction operand1=operations.getOperand1();
+        TabulatedFunction operand2=operations.getOperand2();
+        TabulatedFunctionOperationService perform = operations.getCombinedTabulatedFunction();
+
+        switch (settings.getOperation()) {
+            case "add" ->
+                    System.out.print(perform.Addition(operand1, operand2));
+            case "subtract" ->
+                    System.out.print(perform.Subtraction(operand1, operand2));
+            case "multiply" ->
+                    System.out.print(perform.Multiplication(operand1, operand2));
+            case "divide" ->
+                    System.out.print(perform.Division(operand1, operand2));
+            default -> {
+            }
+            // Handle default case if needed
         }
-//        System.out.print(operations.getOperand1());
-//        System.out.print(operations.getOperand2());
-//        System.out.print(operations.getResult());
+
         return "/operations";
     }
 
