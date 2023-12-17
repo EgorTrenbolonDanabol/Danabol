@@ -12,6 +12,8 @@ public class TabulatedFunctionForm {
     private double[] xValues;
     private double[] yValues;
     private TabulatedFunction function;
+
+
     public int getAmount() {
         return amount;
     }

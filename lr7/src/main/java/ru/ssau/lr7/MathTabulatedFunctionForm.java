@@ -6,7 +6,19 @@ import ru.ssau.lr7.functions.factory.ArrayTabulatedFunctionFactory;
 import ru.ssau.lr7.functions.factory.LinkedListTabulatedFunctionFactory;
 import ru.ssau.lr7.functions.factory.TabulatedFunctionFactory;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MathTabulatedFunctionForm {
+    public Map<String, MathFunction> getMapa() {
+        return mapa;
+    }
+
+    public void setMapa(Map<String, MathFunction> mapa) {
+        this.mapa = mapa;
+    }
+
+    private Map<String, MathFunction> mapa = new HashMap<>();
     private double xFrom;
     private double xTo;
     private int count;
@@ -59,3 +71,4 @@ public class MathTabulatedFunctionForm {
         tabulatedFunction = factory.create(mathFunction, xFrom, xTo, count);
     }
 }
+

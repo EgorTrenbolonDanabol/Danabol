@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Main page</title>
 </head>
 <body>
-<p>Create Tabulated function <a href="/createTabulatedFunction">here</a></p>
-<p>Create Math Function <a href="/tabulatedFunctionMathForm">here</a></p>
-<p>Settings <a href="/settings">here</a></p>
-<p>Operations <a href="/operations">here</a></p>
+<form th:action="@{/index}" method="get" >
+    <button>Начать</button>
+</form>
 </body>
 </html>

@@ -12,12 +12,26 @@ import java.util.Map;
 import java.util.Objects;
 
 @Controller
-@SessionAttributes({"tabulatedFunctionForm", "settings", "mathTabulatedFunctionForm"})
+@SessionAttributes({"tabulatedFunctionForm", "settings", "mathTabulatedFunctionForm", "operations"})
 public class TabulatedFunctionController {
-    Settings settings=new Settings("array");
-    @RequestMapping(value = "/createTabulatedFunction", method = RequestMethod.GET)
-    public String amountOfPointsForm(@RequestParam(name = "error", required = false, defaultValue = "") String error, Model model) {
+    Settings settings = new Settings("array");
+
+
+
+
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    public String setsession(Model model) {
         TabulatedFunctionForm tabulatedFunctionForm = new TabulatedFunctionForm();
+        MathTabulatedFunctionForm mathTabulatedFunctionForm = new MathTabulatedFunctionForm();
+        //System.out.print("HELOOOO");
+        model.addAttribute("tabulatedFunctionForm", tabulatedFunctionForm);
+        model.addAttribute("mathTabulatedFunctionForm", mathTabulatedFunctionForm);
+        return "main";
+    }
+
+    @RequestMapping(value = "/createTabulatedFunction", method = RequestMethod.GET)
+    public String amountOfPointsForm(@RequestParam(name = "error", required = false, defaultValue = "") String error, Model model,@ModelAttribute TabulatedFunctionForm tabulatedFunctionForm) {
+
         model.addAttribute("tabulatedFunctionForm", tabulatedFunctionForm);
         return "createTabulatedFunction";
     }
@@ -45,7 +59,7 @@ public class TabulatedFunctionController {
         }
 
         System.out.println(tabulatedFunctionForm.getFunction());
-        return "index";
+        return "main";
     }
 
 
@@ -59,24 +73,22 @@ public class TabulatedFunctionController {
     }
 
     //Вторая половина Первого задания
-    Map<String, MathFunction> mapa=new HashMap<>();
+    ;
     @RequestMapping(value = "/tabulatedFunctionMathForm", method = RequestMethod.GET)
-    public String xFromXto(@RequestParam(name = "error", required = false, defaultValue = "") String error, Model model) {
-        MathTabulatedFunctionForm mathTabulatedFunctionForm = new MathTabulatedFunctionForm();
-        mapa.put("Identity", new IdentityFunction());
-        mapa.put("Sqr", new SqrFunction());
-        mapa.put("Uni", new UnitFunction());
-        mapa.put("Zero", new ZeroFunction());
-        model.addAttribute("mathTabulatedFunctionForm", mathTabulatedFunctionForm);
-        model.addAttribute("listFunctions", mapa);
+    public String xFromXto(@RequestParam(name = "error", required = false, defaultValue = "") String error, Model model,@ModelAttribute MathTabulatedFunctionForm mathTabulatedFunctionForm) {
+
+        mathTabulatedFunctionForm.getMapa().put("Identity", new IdentityFunction());
+        mathTabulatedFunctionForm.getMapa().put("Sqr", new SqrFunction());
+        mathTabulatedFunctionForm.getMapa().put("Uni", new UnitFunction());
+        mathTabulatedFunctionForm.getMapa().put("Zero", new ZeroFunction());
+        model.addAttribute("listFunctions", mathTabulatedFunctionForm.getMapa());
+        //System.out.print("YOOOO");
         return "tabulatedFunctionMathForm";
     }
+
     @RequestMapping(value = "/tabulatedFunctionMathForm", method = RequestMethod.POST, name = "reg")
     public String xFxTPost(@ModelAttribute MathTabulatedFunctionForm mathTabulatedFunctionForm, Model model) {
-        model.addAttribute("mathTabulatedFunctionForm", mathTabulatedFunctionForm);
-        model.addAttribute("listFunctions", mapa);
-
-        MathFunction selectedFunction = mapa.get(mathTabulatedFunctionForm.getFunction());
+        MathFunction selectedFunction = mathTabulatedFunctionForm.getMapa().get(mathTabulatedFunctionForm.getFunction());
         switch (settings.getTabulatedFunctionFactory()) {
             case "array" -> mathTabulatedFunctionForm.createArray(selectedFunction);
             case "linked" -> mathTabulatedFunctionForm.createLinked(selectedFunction);
@@ -84,7 +96,7 @@ public class TabulatedFunctionController {
 
 
         System.out.println(mathTabulatedFunctionForm.getTabulatedFunction());
-        return "index";
+        return "main";
     }
 
     // начало второго задания(насткройка)
@@ -94,23 +106,82 @@ public class TabulatedFunctionController {
         model.addAttribute("settings", settings);
         return "settings";
     }
-    @RequestMapping(value = "/settings", method = RequestMethod.POST, name="set")
+
+    @RequestMapping(value = "/settings", method = RequestMethod.POST, name = "set")
     public String set(@ModelAttribute Settings settings, Model model) {
         model.addAttribute("settings", settings);
         //System.out.print(settings.getTabulatedFunctionFactory());
-        return "index";
+        return "main";
     }
 
 
     //калькулятор
+    Operations operations = new Operations();
 
     @RequestMapping(value = "/operations", method = RequestMethod.GET) // открытие формы с калькулятором
-    public String operationForm(Model model) {
-        Operations operations=new Operations();
+    public String operationForm(Model model,
+                                @ModelAttribute("tabulatedFunctionForm") TabulatedFunctionForm tabulatedFunctionForm,
+                                @ModelAttribute("mathTabulatedFunctionForm") MathTabulatedFunctionForm mathTabulatedFunctionForm) {
+        if(Objects.equals(operations.getType(), "createTabulatedFunctionOperand1"))
+        {
+            operations.setOperand1(tabulatedFunctionForm.getFunction());
+        }
+        else if(Objects.equals(operations.getType(), "createTabulatedFunctionOperand2"))
+        {
+            operations.setOperand2(tabulatedFunctionForm.getFunction());
+        }
+        else if(Objects.equals(operations.getType(), "createMathTabulatedFunctionOperand1"))
+        {
+            operations.setOperand1(mathTabulatedFunctionForm.getTabulatedFunction());
+        }
+        else if(Objects.equals(operations.getType(), "createMathTabulatedFunctionOperand2"))
+        {
+            operations.setOperand2(mathTabulatedFunctionForm.getTabulatedFunction());
+        }
         model.addAttribute("operations", operations);
         return "operations";
     }
 
+    @RequestMapping(value = "/operations", method = RequestMethod.POST, params = "createTabulatedFunctionOperand1")
+    public String CreateTabulatedFunctionOperand1(Model model) {
+        operations.setType("createTabulatedFunctionOperand1");
+        model.addAttribute("operations", operations);
+        return "/createTabulatedFunction";
+    }
+
+    @RequestMapping(value = "/operations", method = RequestMethod.POST, params = "createTabulatedFunctionOperand2")
+    public String CreateTabulatedFunctionOperand2(Model model) {
+        operations.setType("createTabulatedFunctionOperand2");
+        model.addAttribute("operations", operations);
+        return "/createTabulatedFunction";
+    }
+
+    @RequestMapping(value = "/operations", method = RequestMethod.POST, params = "createMathTabulatedFunctionOperand1")
+    public String CreateMathTabulatedFunctionOperand1(Model model) {
+        operations.setType("createMathTabulatedFunctionOperand1");
+        model.addAttribute("operations", operations);
+        return "redirect:/tabulatedFunctionMathForm";
+    }
+
+    @RequestMapping(value = "/operations", method = RequestMethod.POST, params = "createMathTabulatedFunctionOperand2")
+    public String CreateMathTabulatedFunctionOperand2(Model model) {
+        operations.setType("createMathTabulatedFunctionOperand2");
+        model.addAttribute("operations", operations);
+        return "redirect:/tabulatedFunctionMathForm";
+    }
+
+    @RequestMapping(value = "/operations", method = RequestMethod.POST, params = "perform")
+    public String performOperation(Model model ) {
+        operations.setSetting(settings.getTabulatedFunctionFactory());
+        System.out.print(operations.getOperation());
+        if(Objects.equals(operations.getOperation(), "add")){
+            System.out.print(operations.getCombinedTabulatedFunction().Addition(operations.getOperand1(), operations.getOperand2()));
+        }
+//        System.out.print(operations.getOperand1());
+//        System.out.print(operations.getOperand2());
+//        System.out.print(operations.getResult());
+        return "/operations";
+    }
 
 
 
