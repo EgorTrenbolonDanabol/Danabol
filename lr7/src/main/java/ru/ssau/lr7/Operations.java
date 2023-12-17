@@ -51,7 +51,7 @@ public class Operations {
     }
 
     TabulatedFunction operand2=new ArrayTabulatedFunction(new double[]{0,0,0,0}, new double[]{0,0,0,0});;
-    TabulatedFunction result;
+    TabulatedFunction result=new ArrayTabulatedFunction(new double[]{0,0,0,0}, new double[]{0,0,0,0});
 
     public TabulatedFunction getResult() {
         return result;

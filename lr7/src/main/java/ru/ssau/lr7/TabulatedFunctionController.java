@@ -5,7 +5,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.ssau.lr7.functions.*;
 import ru.ssau.lr7.functions.factory.ArrayTabulatedFunctionFactory;
+import ru.ssau.lr7.functions.factory.LinkedListTabulatedFunctionFactory;
 import ru.ssau.lr7.functions.factory.TabulatedFunctionFactory;
+import ru.ssau.lr7.operations.DifferentialOperator;
+import ru.ssau.lr7.operations.TabulatedDifferentialOperator;
 import ru.ssau.lr7.operations.TabulatedFunctionOperationService;
 
 import java.util.HashMap;
@@ -13,7 +16,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Controller
-@SessionAttributes({"tabulatedFunctionForm", "settings", "mathTabulatedFunctionForm", "operations"})
+@SessionAttributes({"tabulatedFunctionForm", "settings", "mathTabulatedFunctionForm", "operations", "differentialOperatorForm"})
 public class TabulatedFunctionController {
     Settings settings = new Settings("array");
 
@@ -28,7 +31,8 @@ public class TabulatedFunctionController {
     }
 
     @RequestMapping(value = "/createTabulatedFunction", method = RequestMethod.GET)
-    public String amountOfPointsForm(@RequestParam(name = "error", required = false, defaultValue = "") String error, Model model,@ModelAttribute TabulatedFunctionForm tabulatedFunctionForm) {
+    public String amountOfPointsForm(@RequestParam(name = "error", required = false, defaultValue = "") String error,
+                                     Model model,@ModelAttribute TabulatedFunctionForm tabulatedFunctionForm) {
 
         model.addAttribute("tabulatedFunctionForm", tabulatedFunctionForm);
         return "createTabulatedFunction";
@@ -73,7 +77,8 @@ public class TabulatedFunctionController {
     //Вторая половина Первого задания
     ;
     @RequestMapping(value = "/tabulatedFunctionMathForm", method = RequestMethod.GET)
-    public String xFromXto(@RequestParam(name = "error", required = false, defaultValue = "") String error, Model model,@ModelAttribute MathTabulatedFunctionForm mathTabulatedFunctionForm) {
+    public String xFromXto(@RequestParam(name = "error", required = false, defaultValue = "") String error, Model model,
+                           @ModelAttribute MathTabulatedFunctionForm mathTabulatedFunctionForm) {
 
         mathTabulatedFunctionForm.getMapa().put("Identity", new IdentityFunction());
         mathTabulatedFunctionForm.getMapa().put("Sqr", new SqrFunction());
@@ -174,24 +179,79 @@ public class TabulatedFunctionController {
         TabulatedFunction operand1=operations.getOperand1();
         TabulatedFunction operand2=operations.getOperand2();
         TabulatedFunctionOperationService perform = operations.getCombinedTabulatedFunction();
-
         switch (settings.getOperation()) {
-            case "add" ->
-                    System.out.print(perform.Addition(operand1, operand2));
-            case "subtract" ->
-                    System.out.print(perform.Subtraction(operand1, operand2));
-            case "multiply" ->
-                    System.out.print(perform.Multiplication(operand1, operand2));
-            case "divide" ->
-                    System.out.print(perform.Division(operand1, operand2));
+            case "add" -> {
+                operations.setResult(perform.Addition(operand1, operand2));
+                //System.out.print(perform.Addition(operand1, operand2));
+            }
+            case "subtract" -> {
+                operations.setResult(perform.Subtraction(operand1, operand2));
+                //System.out.print(perform.Subtraction(operand1, operand2));
+            }
+            case "multiply" -> {
+                operations.setResult(perform.Multiplication(operand1, operand2));
+                //System.out.print(perform.Multiplication(operand1, operand2));
+            }
+            case "divide" -> {
+                operations.setResult(perform.Division(operand1, operand2));
+                //System.out.print(perform.Division(operand1, operand2));
+            }
             default -> {
             }
-            // Handle default case if needed
+
         }
+
+        System.out.print(operations.getResult());
 
         return "/operations";
     }
 
+    //Дифференциальный оператор
+    DifferentialOperatorForm differentialOperatorForm=new DifferentialOperatorForm();
+    @RequestMapping(value = "/differentialOperator", method = RequestMethod.GET)
+    public String DiffPage(Model model, @ModelAttribute("tabulatedFunctionForm") TabulatedFunctionForm tabulatedFunctionForm,
+                           @ModelAttribute("mathTabulatedFunctionForm") MathTabulatedFunctionForm mathTabulatedFunctionForm) {
+
+        TabulatedFunction linkedOperand=tabulatedFunctionForm.getFunction();
+        TabulatedFunction mathOperand=mathTabulatedFunctionForm.getTabulatedFunction();
+
+        if(differentialOperatorForm.getType()!=null){
+            if (Objects.equals(differentialOperatorForm.getType(), "createTabulatedFunction"))
+                differentialOperatorForm.setFunction(linkedOperand);
+            else if (Objects.equals(differentialOperatorForm.getType(), "createMathTabulatedFunction")) {
+                differentialOperatorForm.setFunction(mathOperand);
+            }
+        }
+
+        model.addAttribute("differentialOperatorForm", differentialOperatorForm);
+        return "/differentialOperator";
+    }
+
+    @RequestMapping(value = "/differentialOperator", method = RequestMethod.POST, params = "createTabulatedFunction")
+    public String CreateTabulatedFunction(Model model) {
+        differentialOperatorForm.setType("createTabulatedFunction");
+        model.addAttribute("differentialOperatorForm", differentialOperatorForm);
+        return "/createTabulatedFunction";
+    }
+    @RequestMapping(value = "/differentialOperator", method = RequestMethod.POST, params = "createMathTabulatedFunction")
+    public String CreateMathTabulatedFunction(Model model) {
+        differentialOperatorForm.setType("createMathTabulatedFunction");
+        model.addAttribute("differentialOperatorForm", differentialOperatorForm);
+        return "redirect:/tabulatedFunctionMathForm";
+    }
+
+    @RequestMapping(value = "/differentialOperator", method = RequestMethod.POST, params = "performDiff")
+    public String Diffop(Model model) {
+
+        TabulatedDifferentialOperator tabulatedDifferentialOperator = new TabulatedDifferentialOperator(new ArrayTabulatedFunctionFactory());
+        switch (settings.getTabulatedFunctionFactory()) {
+            case "array" -> tabulatedDifferentialOperator=new TabulatedDifferentialOperator(new ArrayTabulatedFunctionFactory());
+            case "linked" -> tabulatedDifferentialOperator=new TabulatedDifferentialOperator(new LinkedListTabulatedFunctionFactory());
+        }
+        differentialOperatorForm.setResult(tabulatedDifferentialOperator.derive(differentialOperatorForm.getFunction()));
+        System.out.print(differentialOperatorForm.getResult());
+        return "/differentialOperator";
+    }
 
 
 }

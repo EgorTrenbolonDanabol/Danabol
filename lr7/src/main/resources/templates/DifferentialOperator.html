@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+</head>
+<body>
+
+<h1>Function Operations</h1>
+
+<!-- Operand 1 Section -->
+<h2>Operand 1</h2>
+<form th:action="@{/differentialOperator}" method="post">
+    <a>
+        <button name="createTabulatedFunction">Create Tabulated</button>
+    </a>
+    <a>
+        <button name="createMathTabulatedFunction">Create Math</button>
+    </a>
+</form>
+
+<form th:action="@{/differentialOperator}" th:object="${differentialOperatorForm}" method="post">
+    <table border="1">
+        <thead>
+        <tr>
+            <th>X Values</th>
+            <th>Y Values</th>
+            <!-- Добавьте заголовки для других столбцов при необходимости -->
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Используйте th:each для создания строк в таблице -->
+        <tr th:each="i : ${#numbers.sequence(0, differentialOperatorForm.function.getCount() - 1)}">
+            <td step="any" th:text="${differentialOperatorForm.function.getX(i)}"></td>
+            <td step="any" th:text="${differentialOperatorForm.function.getY(i)}"></td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+
+<h2>Result</h2>
+<form th:action="@{/differentialOperator}" th:object="${differentialOperatorForm}" method="post">
+    <table border="1">
+        <thead>
+        <tr>
+            <th>X Values</th>
+            <th>Y Values</th>
+            <!-- Добавьте заголовки для других столбцов при необходимости -->
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Используйте th:each для создания строк в таблице -->
+        <tr th:each="i : ${#numbers.sequence(0, differentialOperatorForm.result.getCount() - 1)}">
+            <td step="any" th:text="${differentialOperatorForm.result.getX(i)}"></td>
+            <td step="any" th:text="${differentialOperatorForm.result.getY(i)}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <button type="submit" name="performDiff">Perform Operation</button>
+</form>
+
+
+</body>
+</html>

@@ -69,6 +69,26 @@
         </tbody>
     </table>
 </form>
+<h2>Result: <span th:text="${operations.result.getClass().getSimpleName()}"></span></h2>
+<form th:action="@{/operations}" th:object="${operations}" method="post">
+    <table border="1">
+        <thead>
+        <tr>
+            <th>X Values</th>
+            <th>Y Values</th>
+            <!-- Добавьте заголовки для других столбцов при необходимости -->
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Используйте th:each для создания строк в таблице -->
+        <tr th:each="i : ${#numbers.sequence(0, operations.result.getCount() - 1)}">
+            <td step="any" th:text="${operations.result.getX(i)}"></td>
+            <td step="any" th:text="${operations.result.getY(i)}"></td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+
 <!-- Operation Section -->
 <h2>Operation</h2>
 <form th:action="@{/operations}" method="post" th:object="${settings}">
