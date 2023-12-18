@@ -4,20 +4,67 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+  <!-- minify -->
+  <link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet" />
+  <!-- latest -->
+  <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+  <!-- core style only -->
+  <link href="https://unpkg.com/nes.css/css/nes-core.min.css" rel="stylesheet" />
   <title>Create Tabulated Function</title>
+  <script>
+    function handleClick(){
+      window.location = "http://localhost:8080/index?"
+    }
+  </script>
+  <style>
+      body{
+          background: url('https://sun9-70.userapi.com/impf/VY0CNQuzkCmduv0kH8CjSuHLus-hpolkEZSPjQ/K_d_sX8M3FE.jpg?size=1920x1080&quality=95&sign=6577263a08adbdeff0233b9c58d45850&type=album') center center fixed;
+      }
+    .container{
+      padding: 20px;
+    }
+    .form-container{
+        max-width: fit-content;
+        margin: 0 auto;
+        margin-top: 7vh;
+    }
+    .form-btn{
+        display: block;
+        margin: 0 auto;
+        margin-top: 1rem;
+    }
+    .line{
+        width: fit-content;
+        margin: 1rem auto;
+    }
+    .inside-container{
+        margin: 0 auto;
+        display: flex;
+        width: fit-content;
+        flex-direction: column;
+        justify-content: center;
+    }
+  </style>
 </head>
 <body>
-<h1>Create Tabulated Function</h1>
+<div class="container">
+    <button class="nes-btn is-primary" onclick="handleClick()">Home</button>
+    <div class="form-container">
+        <h1 style="text-shadow: 1px 1px 2px black;">Create using a table</h1>
+        <p th:if="${error}" th:text="${error}"></p>
+        <form th:action="@{/createTabulatedFunction}" th:object="${tabulatedFunctionForm}" method="post">
+            <div class="inside-container">
+                <div class="line">
+                    <label for="amount">Number of Points:</label>
+                    <input type="number" id="amount" th:field="*{amount}" required max="9999" min="2" class="nes-input" style="width: 80px">
+                </div>
+                <button type="submit" class="form-btn nes-btn is-success" style="width: 100%">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
 
-
-<p th:if="${error}" th:text="${error}"></p>
-
-<form th:action="@{/createTabulatedFunction}" th:object="${tabulatedFunctionForm}" method="post">
-  <label for="amount">Number of Points:</label>
-  <input type="number" id="amount" th:field="*{amount}" required max="9999" min="2">
-  <br>
-  <button type="submit">Submit</button>
-</form>
 
 
 </body>

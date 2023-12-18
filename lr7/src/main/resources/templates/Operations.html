@@ -4,103 +4,151 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <!-- minify -->
+    <link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet" />
+    <!-- latest -->
+    <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+    <!-- core style only -->
+    <link href="https://unpkg.com/nes.css/css/nes-core.min.css" rel="stylesheet" />
     <title>Result</title>
+    <script>
+        function handleClick(){
+            window.location = "http://localhost:8080/index?"
+        }
+    </script>
+    <style>
+        body{
+            background: url('https://sun9-36.userapi.com/impf/FoyAH5AYoMrpWduEB2aTZuju3abQAasXYX26ig/vnNXaqJ9d4w.jpg?size=1400x1050&quality=95&sign=7d607da9e2731037802e78003498bded&type=album') center center fixed;
+            padding: 20px;
+        }
+        .container{
+            margin: .5vh auto 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80vw;
+        }
+        .operands{
+            display: flex;
+            justify-content: space-between;
+        }
+        .operand-1{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: fit-content;
+        }
+        .operand-2{
+            margin-left: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: fit-content;
+        }
+    </style>
 </head>
 <body>
+<button class="nes-btn is-primary home-btn" onclick="handleClick()">Home</button>
+<div class="container">
+    <h1 style="text-shadow: 1px 1px 2px black;">Function Operations</h1>
+    <!-- Operand 1 Section -->
+    <div class="operands">
+        <div class="operand-1">
+            <h2>Operand 1</h2>
+            <form th:action="@{/operations}" method="post">
+                <a>
+                    <button class="nes-btn" name="createTabulatedFunctionOperand1">Create Tabulated</button>
+                </a>
+                <a>
+                    <button class="nes-btn" name="createMathTabulatedFunctionOperand1">Create Math</button>
+                </a>
+            </form>
 
-<h1>Function Operations</h1>
+            <form style="margin-top: 1vh" th:action="@{/operations}" th:object="${operations}" method="post">
+                <table class="nes-table is-bordered is-centered" border="1">
+                    <thead>
+                    <tr>
+                        <th>X values</th>
+                        <th>Y values</th>
+                        <!-- Добавьте заголовки для других столбцов при необходимости -->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Используйте th:each для создания строк в таблице -->
+                    <tr th:each="i : ${#numbers.sequence(0, operations.operand1.getCount() - 1)}">
+                        <td step="any" th:text="${operations.operand1.getX(i)}"></td>
+                        <td step="any" th:text="${operations.operand1.getY(i)}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <!-- Operand 2 Section -->
+        <div class="operand-2">
+            <h2>Operand 2</h2>
+            <form th:action="@{/operations}" method="post">
+                <a>
+                    <button class="nes-btn" name="createTabulatedFunctionOperand2">Create Tabulated</button>
+                </a>
+                <a>
+                    <button class="nes-btn" name="createMathTabulatedFunctionOperand2">Create Math</button>
+                </a>
+            </form>
+            <form style="margin-top: 1vh" th:action="@{/operations}" th:object="${operations}" method="post">
+                <table class="nes-table is-bordered is-centered" border="1">
+                    <thead>
+                    <tr>
+                        <th>X values</th>
+                        <th>Y values</th>
+                        <!-- Добавьте заголовки для других столбцов при необходимости -->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Используйте th:each для создания строк в таблице -->
+                    <tr th:each="i : ${#numbers.sequence(0, operations.operand2.getCount() - 1)}">
+                        <td step="any" th:text="${operations.operand2.getX(i)}"></td>
+                        <td step="any" th:text="${operations.operand2.getY(i)}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
 
-<!-- Operand 1 Section -->
-<h2>Operand 1</h2>
-<form th:action="@{/operations}" method="post">
-<a>
-    <button name="createTabulatedFunctionOperand1">Create Tabulated</button>
-</a>
-    <a>
-        <button name="createMathTabulatedFunctionOperand1">Create Math</button>
-    </a>
-</form>
+    </div>
+    <h2 style="margin-top: 20px">Result: <span th:text="${operations.result.getClass().getSimpleName()}"></span></h2>
+    <form th:action="@{/operations}" th:object="${operations}" method="post">
+        <table class="nes-table is-bordered is-centered" border="1">
+            <thead>
+            <tr>
+                <th>X values</th>
+                <th>Y values</th>
+                <!-- Добавьте заголовки для других столбцов при необходимости -->
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Используйте th:each для создания строк в таблице -->
+            <tr th:each="i : ${#numbers.sequence(0, operations.result.getCount() - 1)}">
+                <td step="any" th:text="${operations.result.getX(i)}"></td>
+                <td step="any" th:text="${operations.result.getY(i)}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
 
-<form th:action="@{/operations}" th:object="${operations}" method="post">
-<table border="1">
-    <thead>
-    <tr>
-        <th>X Values</th>
-        <th>Y Values</th>
-        <!-- Добавьте заголовки для других столбцов при необходимости -->
-    </tr>
-    </thead>
-    <tbody>
-    <!-- Используйте th:each для создания строк в таблице -->
-    <tr th:each="i : ${#numbers.sequence(0, operations.operand1.getCount() - 1)}">
-        <td step="any" th:text="${operations.operand1.getX(i)}"></td>
-        <td step="any" th:text="${operations.operand1.getY(i)}"></td>
-    </tr>
-    </tbody>
-</table>
-</form>
-
-<!-- Operand 2 Section -->
-<h2>Operand 2</h2>
-<form th:action="@{/operations}" method="post">
-    <a>
-        <button name="createTabulatedFunctionOperand2">Create Tabulated</button>
-    </a>
-    <a>
-        <button name="createMathTabulatedFunctionOperand2">Create Math</button>
-    </a>
-</form>
-
-<form th:action="@{/operations}" th:object="${operations}" method="post">
-    <table border="1">
-        <thead>
-        <tr>
-            <th>X Values</th>
-            <th>Y Values</th>
-            <!-- Добавьте заголовки для других столбцов при необходимости -->
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Используйте th:each для создания строк в таблице -->
-        <tr th:each="i : ${#numbers.sequence(0, operations.operand2.getCount() - 1)}">
-            <td step="any" th:text="${operations.operand2.getX(i)}"></td>
-            <td step="any" th:text="${operations.operand2.getY(i)}"></td>
-        </tr>
-        </tbody>
-    </table>
-</form>
-<h2>Result: <span th:text="${operations.result.getClass().getSimpleName()}"></span></h2>
-<form th:action="@{/operations}" th:object="${operations}" method="post">
-    <table border="1">
-        <thead>
-        <tr>
-            <th>X Values</th>
-            <th>Y Values</th>
-            <!-- Добавьте заголовки для других столбцов при необходимости -->
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Используйте th:each для создания строк в таблице -->
-        <tr th:each="i : ${#numbers.sequence(0, operations.result.getCount() - 1)}">
-            <td step="any" th:text="${operations.result.getX(i)}"></td>
-            <td step="any" th:text="${operations.result.getY(i)}"></td>
-        </tr>
-        </tbody>
-    </table>
-</form>
-
-<!-- Operation Section -->
-<h2>Operation</h2>
-<form th:action="@{/operations}" method="post" th:object="${settings}">
-    <label for="operation">Operation:</label>
-    <select id="operation" name="operation" th:field="*{operation}">
-        <option value="add">+</option>
-        <option value="subtract">-</option>
-        <option value="multiply">*</option>
-        <option value="divide">/</option>
-    </select>
-    <button type="submit" name="perform">Perform Operation</button>
-</form>
-
+    <!-- Operation Section -->
+    <form th:action="@{/operations}" method="post" th:object="${settings}" style="margin-top: 10px">
+        <label for="operation" style="text-shadow: 1px 1px 2px black;">Operation:</label>
+        <div class="nes-select">
+            <select id="operation" name="operation" th:field="*{operation}">
+                <option value="add">+</option>
+                <option value="subtract">-</option>
+                <option value="multiply">*</option>
+                <option value="divide">/</option>
+            </select>
+        </div>
+        <button class="nes-btn" type="submit" name="perform" style="margin-top: 10px">Perform Operation</button>
+    </form>
+</div>
 </body>
 </html>

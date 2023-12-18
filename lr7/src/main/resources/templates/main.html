@@ -1,14 +1,120 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Main page</title>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <!-- minify -->
+    <link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet" />
+    <!-- latest -->
+    <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+    <!-- core style only -->
+    <link href="https://unpkg.com/nes.css/css/nes-core.min.css" rel="stylesheet" />
+    <script type="text/javascript">
+        function handleSelect(el)
+        {
+            window.location = el.value;
+        }
+    </script>
+    <style>
+        body{
+            background: url('https://sun9-9.userapi.com/impf/yl0pofTU5MvMHKUl5KzgKD5eSUFwNhyQAGudWA/UEJ1n9Bdcyw.jpg?size=2560x1608&quality=95&sign=983fe0a84f30d68576c0e48e37491c47&type=album') center center fixed;
+            margin-top: 10vh;
+        }
+        header{
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #b3daff;
+            height: 10vh;
+            width: 100vw;
+            border-bottom: 1px black solid;
+            padding: 2rem;
+        }
+        .header__text{
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: start;
+            font-size: 2rem;
+            height: fit-content;
+            text-transform: uppercase;
+            animation: 2s neon-2 alternate-reverse infinite;
+        }
+        @keyframes neon-2 {
+            from {
+                text-shadow: 0 0 5px #FFF,
+                0 0 10px #FFF,
+                0 0 15px #FFF,
+                0 0 20px #ffe066;
+            }
+            to {
+                text-shadow: 0 0 20px #BFE2FF,
+                0 0 35px #ffe066,
+                0 0 40px #ffe066,
+                0 0 50px #ffe066,
+                0 0 800px #ffe066;
+            }
+        }
+        .text-block{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30vh;
+        }
+        .selector-container{
+            width: 856px;
+            margin: 15vh auto 0;
+        }
+        option{
+            color: black;
+        }
+        .label-for-select {
+            font-size: 1.3rem;
+        }
+        .setting {
+            font-size: 1.3rem;
+            margin: 5vh;
+            margin-top: 12vh;
+            text-align: right;
+        }
+        .Operation {
+            font-size: 1.3rem;
+            margin: 5vh;
+            text-align: center;
+        }
+        .Differential {
+            font-size: 1.3rem;
+            margin: 5vh;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<p>Create Tabulated function <a href="/createTabulatedFunction">here</a></p>
-<p>Create Math Function <a href="/tabulatedFunctionMathForm">here</a></p>
-<p>Settings <a href="/settings">here</a></p>
-<p>Operations <a href="/operations">here</a></p>
-<p>Create DefferentialOperator<a href="/differentialOperator">here</a></p>
+    <header class="header">
+        <span class="header__text nes-text is-primary" style="color: yellow; text-shadow: 1px 1px 2px black"> MATH</span>
+    </header>
+    <div class="setting">
+        <p><a href="/settings"><img src="https://psv4.userapi.com/c909328/u357897553/docs/d24/17dbdaea1ad6/copy1.png?extra=h8-S9Fmhc20axeaoKircvyr9KYiKcbUbWJ09w_8IoQs0fFxIsKp8mhkpMX_QsXBxpO_fmt2GZJnC9eWzKRDmT8hXr_q1y8T6HDmlbkRbwut0LIkZqhLyK3hs4OBeBz6VQcQMtsz6U_xX_tis" width="65" height="65"></a></p>
+    </div>
+    <div class="selector-container">
+        <label for="default_select" class="label-for-select" style="text-shadow: 1px 1px 2px black">Method of creating
+            a tabulated function</label>
+        <div class="nes-select">
+            <select required id="default_select" onchange="handleSelect(this)">
+                <option value="" disabled selected hidden>Select...</option>
+                <option value="/createTabulatedFunction">using table</option>
+                <option value="/tabulatedFunctionMathForm">using math function</option>
+            </select>
+        </div>
+    </div>
+    <div class="Differential">
+        <a class="nes-btn" href="/differentialOperator" style="width: 856px;">Differentiation of a tabulated function</a>
+    </div>
+    <div class="Operation">
+        <a class="nes-btn" href="/operations" style="max-width: 856px;">Simple operations on tabulated functions</a>
+    </div>
 </body>
 </html>

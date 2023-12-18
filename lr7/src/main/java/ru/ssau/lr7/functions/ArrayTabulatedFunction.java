@@ -112,13 +112,12 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
     }
 
     protected double extrapolateLeft(double x) {
-        return 0;
+        return interpolate(x, this.xValues[0], this.xValues[1], this.yValues[0], this.yValues[1]);
     }
 
     protected double extrapolateRight(double x) {
-        return 0;
+        return interpolate(x, this.xValues[this.count-2], this.xValues[this.count-1], this.yValues[this.count-2], this.yValues[this.count-1]);
     }
-
     protected double interpolate(double x, int floorIndex) {
         if (floorIndex < 0 || floorIndex >= count - 1) {
             throw new InterpolationException("Interpolation index is out of bounds.");

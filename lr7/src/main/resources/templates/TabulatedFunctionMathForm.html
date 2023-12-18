@@ -4,29 +4,84 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <!-- minify -->
+    <link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet" />
+    <!-- latest -->
+    <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+    <!-- core style only -->
+    <link href="https://unpkg.com/nes.css/css/nes-core.min.css" rel="stylesheet" />
     <title>User Registration</title>
+    <script>
+        function handleClick(){
+            window.location = "http://localhost:8080/index?"
+        }
+    </script>
+    <style>
+        body{
+            background: url('https://sun9-2.userapi.com/impf/Zdts8ZiAl3tQ64WqFWxrTyTaW-itlvBRB6pNng/8OFUDLc7C4w.jpg?size=1920x1080&quality=95&sign=fedd8c002e53bd66c330082fee0ed88d&type=album') center center fixed;
+        }
+        .container{
+            padding: 20px;
+        }
+        .form-container{
+            width: fit-content;
+            margin: 0 auto;
+            margin-top: 7vh;
+        }
+        .function-select{
+            width: 100%;
+        }
+        .line{
+            margin-bottom: 1rem;
+            width: fit-content;
+        }
+        .inside-container{
+            width: fit-content;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: 0 auto;
+            margin-top: 2rem;
+        }
+    </style>
 </head>
 <body>
-<div align="center">
-    <h1>User Registration</h1>
-    <form action="#" th:action="@{/tabulatedFunctionMathForm}" method="post" th:object="${mathTabulatedFunctionForm}">
-        <label>xFrom:</label>
-        <input type="number" th:field="*{xFrom}" step="any"/><br/>
+<div class="container">
+    <button class="nes-btn is-primary" onclick="handleClick()">Home</button>
+    <div class="form-container">
+        <h1 style="text-shadow: 1px 1px 2px black;">Create using a function</h1>
+        <form action="#" th:action="@{/tabulatedFunctionMathForm}" method="post" th:object="${mathTabulatedFunctionForm}">
+            <div class="inside-container">
+                <div class="line">
+                    <label>xFrom:</label>
+                    <input type="number" th:field="*{xFrom}" step="any" class="nes-input" style="width: 340px"/><br/>
+                </div>
 
-        <label>xTo:</label>
-        <input type="number" th:field="*{xTo}" step="any"/><br/>
+                <div class="line">
+                    <label>xTo:</label>
+                    <input type="number" th:field="*{xTo}" step="any" class="nes-input" style="margin-left: 35px; width: 340px"/><br/>
+                </div>
 
-        <label>count:</label>
-        <input type="number" th:field="*{count}" /><br/>
+                <div class="line">
+                    <label>count:</label>
+                    <input type="number" th:field="*{count}" class="nes-input" style="width: 340px"  min="2"/><br/>
+                </div>
 
-        <label>Functions:</label>
-        <select th:field="*{function}">
-            <option th:each="p : ${listFunctions}" th:value="${p.key}" th:text="${p.key}" />
-        </select>
-        <br/>
 
-        <button type="submit" name="reg">Register</button>
-    </form>
+                <label>Functions:</label>
+                <div class="function-select nes-select">
+                    <select required id="default_select" th:field="*{function}">
+                        <option th:each="p : ${listFunctions}" th:value="${p.key}" th:text="${p.key}" />
+                    </select>
+                </div>
+
+                <button type="submit" name="reg" class="nes-btn is-success form-btn" style="margin-top: 2rem">Submit</button>
+            </div>
+            <br/>
+        </form>
+    </div>
 </div>
+
 </body>
 </html>
