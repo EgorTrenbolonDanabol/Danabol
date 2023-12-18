@@ -76,11 +76,11 @@
                 <tr>
                     <th>X values</th>
                     <th>Y values</th>
-                    <!-- Добавьте заголовки для других столбцов при необходимости -->
+
                 </tr>
                 </thead>
                 <tbody>
-                <!-- Используйте th:each для создания строк в таблице -->
+
                 <tr th:each="i : ${#numbers.sequence(0, differentialOperatorForm.function.getCount() - 1)}">
                     <td step="any" th:text="${differentialOperatorForm.function.getX(i)}"></td>
                     <td step="any" th:text="${differentialOperatorForm.function.getY(i)}"></td>
@@ -96,11 +96,11 @@
                 <tr>
                     <th>X values</th>
                     <th>Y values</th>
-                    <!-- Добавьте заголовки для других столбцов при необходимости -->
+
                 </tr>
                 </thead>
                 <tbody>
-                <!-- Используйте th:each для создания строк в таблице -->
+
                 <tr th:each="i : ${#numbers.sequence(0, differentialOperatorForm.result.getCount() - 1)}">
                     <td step="any" th:text="${differentialOperatorForm.result.getX(i)}"></td>
                     <td step="any" th:text="${differentialOperatorForm.result.getY(i)}"></td>

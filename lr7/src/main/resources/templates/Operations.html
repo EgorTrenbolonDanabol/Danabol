@@ -5,11 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
-    <!-- minify -->
+
     <link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet" />
-    <!-- latest -->
+
     <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
-    <!-- core style only -->
+
     <link href="https://unpkg.com/nes.css/css/nes-core.min.css" rel="stylesheet" />
     <title>Result</title>
     <script>
@@ -71,11 +71,11 @@
                     <tr>
                         <th>X values</th>
                         <th>Y values</th>
-                        <!-- Добавьте заголовки для других столбцов при необходимости -->
+
                     </tr>
                     </thead>
                     <tbody>
-                    <!-- Используйте th:each для создания строк в таблице -->
+
                     <tr th:each="i : ${#numbers.sequence(0, operations.operand1.getCount() - 1)}">
                         <td step="any" th:text="${operations.operand1.getX(i)}"></td>
                         <td step="any" th:text="${operations.operand1.getY(i)}"></td>
@@ -101,11 +101,11 @@
                     <tr>
                         <th>X values</th>
                         <th>Y values</th>
-                        <!-- Добавьте заголовки для других столбцов при необходимости -->
+
                     </tr>
                     </thead>
                     <tbody>
-                    <!-- Используйте th:each для создания строк в таблице -->
+
                     <tr th:each="i : ${#numbers.sequence(0, operations.operand2.getCount() - 1)}">
                         <td step="any" th:text="${operations.operand2.getX(i)}"></td>
                         <td step="any" th:text="${operations.operand2.getY(i)}"></td>
@@ -123,11 +123,11 @@
             <tr>
                 <th>X values</th>
                 <th>Y values</th>
-                <!-- Добавьте заголовки для других столбцов при необходимости -->
+
             </tr>
             </thead>
             <tbody>
-            <!-- Используйте th:each для создания строк в таблице -->
+
             <tr th:each="i : ${#numbers.sequence(0, operations.result.getCount() - 1)}">
                 <td step="any" th:text="${operations.result.getX(i)}"></td>
                 <td step="any" th:text="${operations.result.getY(i)}"></td>
@@ -136,7 +136,7 @@
         </table>
     </form>
 
-    <!-- Operation Section -->
+
     <form th:action="@{/operations}" method="post" th:object="${settings}" style="margin-top: 10px">
         <label for="operation" style="text-shadow: 1px 1px 2px black;">Operation:</label>
         <div class="nes-select">

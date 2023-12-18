@@ -33,20 +33,20 @@
         <tr>
           <th>X values</th>
           <th>Y values</th>
-          <!-- Добавьте заголовки для других столбцов при необходимости -->
+
         </tr>
         </thead>
         <tbody>
-        <!-- Используйте th:each для создания строк в таблице -->
+
         <tr th:each="row : ${#numbers.sequence(0, tabulatedFunctionForm.getAmount - 1)}">
-          <!-- Your code for each row goes here -->
+
           <td><input type="number" step="any" th:field="*{xValues[__${row}__]}" /></td>
           <td><input type="number" step="any" th:field="*{yValues[__${row}__]}" /></td>
         </tr>
         </tbody>
       </table>
       <!-- Кнопка для подтверждения ввода -->
-      <!-- <button type="submit">Submit</button>-->
+
     </form>
   </div>
 </div>
